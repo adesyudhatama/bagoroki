@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bagian Organisasi Sekretariat Daerah Kabupaten OKI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --m3-expressive-primary: #6200EE;
+            --m3-expressive-secondary: #03DAC6;
+            --m3-expressive-on-primary: #FFFFFF;
+            --m3-expressive-on-secondary: #000000;
+            --m3-expressive-surface: #1E1F21;
+            --m3-expressive-on-surface: #FFFFFF;
+            --m3-expressive-background: #121212;
+            --m3-expressive-shadow: rgba(0, 0, 0, 0.4);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--m3-expressive-background);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--m3-expressive-on-surface);
+            transition: background-color 0.5s ease;
+            overflow: hidden;
+            background-image: url('https://images.unsplash.com/photo-1549419137-f05021e16f73?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            padding: 2rem;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            animation: fadeIn 0.8s forwards;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 3rem;
+            box-shadow: 0 10px 30px var(--m3-expressive-shadow);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .profile-picture {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1.5rem;
+            border: 5px solid var(--m3-expressive-secondary);
+            box-shadow: 0 0 25px var(--m3-expressive-secondary);
+            transition: transform 0.4s ease-in-out;
+        }
+        
+        .profile-picture:hover {
+            transform: scale(1.1) rotate(-8deg);
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 2rem 0.5rem 2rem 0.5rem; /* Shape yang lebih unik */
+            box-shadow: 0 6px 20px var(--m3-expressive-shadow);
+        }
+
+        .link-button {
+            display: block;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 1.25rem 2rem;
+            margin: 1.25rem 0;
+            color: var(--m3-expressive-on-surface);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.25rem;
+            transition: transform 0.3s ease-out, background-color 0.3s ease-out, box-shadow 0.3s ease-out;
+            border-radius: 2rem 0.5rem 2rem 0.5rem; /* Bentuk asimetris */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .link-button:hover {
+            transform: translateY(-8px) scale(1.03);
+            background-color: var(--m3-expressive-secondary);
+            color: var(--m3-expressive-on-secondary);
+            box-shadow: 0 10px 25px var(--m3-expressive-secondary);
+        }
+        
+        .link-button:active {
+            transform: translateY(0px) scale(0.98);
+        }
+        
+        .name {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            color: var(--m3-expressive-secondary);
+        }
+
+        .bio {
+            font-size: 1.1rem;
+            font-weight: 400;
+            opacity: 0.9;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <img src="https://i.pravatar.cc/300" alt="Foto Profil" class="profile-picture">
+            <h1 class="name">Bagian Organisasi</h1>
+            <p class="bio">Sekretariat Daerah Kabupaten Ogan Komering Ilir</p>
+        </div>
+
+        <a href="#" class="link-button">
+            Website Resmi
+        </a>
+        <a href="#" class="link-button">
+            Informasi Publik
+        </a>
+        <a href="#" class="link-button">
+            Layanan Online
+        </a>
+        <a href="#" class="link-button">
+            Berita & Artikel
+        </a>
+        <a href="#" class="link-button">
+            Hubungi Kami
+        </a>
+    </div>
+</body>
+</html>
