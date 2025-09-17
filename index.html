@@ -3,151 +3,351 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bagian Organisasi Sekretariat Daerah Kabupaten OKI</title>
+    <title>Dashboard Layanan - Liquid Glass</title>
+    
+    <!-- Tailwind CSS untuk tata letak dan utilitas dasar -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons untuk ikonografi yang bersih -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
+        /* CSS Kustom untuk Efek Liquid Glass dan Animasi */
         :root {
-            --m3-expressive-primary: #6200EE;
-            --m3-expressive-secondary: #03DAC6;
-            --m3-expressive-on-primary: #FFFFFF;
-            --m3-expressive-on-secondary: #000000;
-            --m3-expressive-surface: #1E1F21;
-            --m3-expressive-on-surface: #FFFFFF;
-            --m3-expressive-background: #121212;
-            --m3-expressive-shadow: rgba(0, 0, 0, 0.4);
+            --glow-size: 60vmin;
+            --background-color: #111827; /* bg-gray-900 */
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--m3-expressive-background);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: var(--m3-expressive-on-surface);
-            transition: background-color 0.5s ease;
+            background-color: var(--background-color);
+            color: #f9fafb; /* text-gray-50 */
+            overflow-x: hidden;
+        }
+
+        /* Latar belakang gradien yang bergerak (fluid) */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
             overflow: hidden;
-            background-image: url('https://images.unsplash.com/photo-1549419137-f05021e16f73?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
         }
 
-        .container {
-            position: relative;
-            z-index: 1;
-            padding: 2rem;
-            max-width: 450px;
+        .background-animation::before {
+            content: '';
+            position: absolute;
+            width: var(--glow-size);
+            height: var(--glow-size);
+            left: -10vmin;
+            top: -10vmin;
+            background-image: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, rgba(99, 102, 241, 0) 70%);
+            animation: move-glow-1 15s infinite alternate;
+            will-change: transform;
+        }
+
+        .background-animation::after {
+            content: '';
+            position: absolute;
+            width: var(--glow-size);
+            height: var(--glow-size);
+            right: -10vmin;
+            bottom: -10vmin;
+            background-image: radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, rgba(139, 92, 246, 0) 70%);
+            animation: move-glow-2 18s infinite alternate;
+            will-change: transform;
+        }
+        
+        @keyframes move-glow-1 {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60vw, 40vh); }
+        }
+
+        @keyframes move-glow-2 {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-50vw, -30vh); }
+        }
+
+        /* Gaya utama untuk card dengan efek liquid glass */
+        .glass-card {
+            background: rgba(31, 41, 55, 0.3); /* bg-gray-800 with opacity */
+            backdrop-filter: blur(24px) saturate(150%);
+            -webkit-backdrop-filter: blur(24px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem; /* rounded-3xl */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 16px 48px 0 rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Kontainer untuk card */
+        .card-scroll-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            #main-container {
+                /* Ubah alignment vertikal agar konten mulai dari atas,
+                   memungkinkan scroll vertikal yang natural saat konten melebihi layar. */
+                justify-content: flex-start;
+                padding-top: 3rem;
+                padding-bottom: 3rem;
+            }
+
+            /* Dengan menghapus override horizontal scroll, .card-scroll-container 
+               akan menggunakan layout grid default-nya, yang secara otomatis
+               akan menumpuk kartu secara vertikal pada layar sempit. */
+        }
+
+        /* Gaya untuk Modal (Pop-up) */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            will-change: opacity;
+        }
+        
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            transform: scale(0.95) translateY(20px);
+            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             width: 90%;
-            text-align: center;
-            animation: fadeIn 0.8s forwards;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 3rem;
-            box-shadow: 0 10px 30px var(--m3-expressive-shadow);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .profile-picture {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 0 auto 1.5rem;
-            border: 5px solid var(--m3-expressive-secondary);
-            box-shadow: 0 0 25px var(--m3-expressive-secondary);
-            transition: transform 0.4s ease-in-out;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            will-change: transform, opacity;
         }
         
-        .profile-picture:hover {
-            transform: scale(1.1) rotate(-8deg);
-        }
-
-        .card {
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-radius: 2rem 0.5rem 2rem 0.5rem; /* Shape yang lebih unik */
-            box-shadow: 0 6px 20px var(--m3-expressive-shadow);
-        }
-
-        .link-button {
-            display: block;
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 1.25rem 2rem;
-            margin: 1.25rem 0;
-            color: var(--m3-expressive-on-surface);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.25rem;
-            transition: transform 0.3s ease-out, background-color 0.3s ease-out, box-shadow 0.3s ease-out;
-            border-radius: 2rem 0.5rem 2rem 0.5rem; /* Bentuk asimetris */
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .link-button:hover {
-            transform: translateY(-8px) scale(1.03);
-            background-color: var(--m3-expressive-secondary);
-            color: var(--m3-expressive-on-secondary);
-            box-shadow: 0 10px 25px var(--m3-expressive-secondary);
-        }
-        
-        .link-button:active {
-            transform: translateY(0px) scale(0.98);
-        }
-        
-        .name {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
-            color: var(--m3-expressive-secondary);
-        }
-
-        .bio {
-            font-size: 1.1rem;
-            font-weight: 400;
-            opacity: 0.9;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        .modal.active .modal-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="card">
-            <img src="https://i.pravatar.cc/300" alt="Foto Profil" class="profile-picture">
-            <h1 class="name">Bagian Organisasi</h1>
-            <p class="bio">Sekretariat Daerah Kabupaten Ogan Komering Ilir</p>
-        </div>
+<body class="antialiased">
 
-        <a href="#" class="link-button">
-            Website Resmi
-        </a>
-        <a href="#" class="link-button">
-            Informasi Publik
-        </a>
-        <a href="#" class="link-button">
-            Layanan Online
-        </a>
-        <a href="#" class="link-button">
-            Berita & Artikel
-        </a>
-        <a href="#" class="link-button">
-            Hubungi Kami
-        </a>
+    <!-- Latar Belakang Animasi -->
+    <div class="background-animation"></div>
+
+    <!-- Konten Utama -->
+    <div id="main-container" class="relative z-10 min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white">
+                Bagian Organisasi
+            </h1>
+            <p class="mt-4 text-lg text-gray-300 max-w-2xl mx-auto">
+                Sekretariat Daerah Kabupaten Ogan Komering Ilir
+            </p>
+        </header>
+
+        <!-- Kontainer Card dengan Scroll Mobile -->
+        <div class="w-full max-w-6xl card-scroll-container md:px-6">
+            
+            <!-- Card 1: Laman Website -->
+            <div class="glass-card flex flex-col overflow-hidden cursor-pointer" data-modal-target="modal-website">
+                <img src="https://placehold.co/600x300/6366f1/FFFFFF?text=Laman+Website" alt="Gambar Laman Website" class="w-full h-40 object-cover">
+                <div class="p-6 flex-grow">
+                    <div class="flex items-center gap-4 mb-3">
+                        <i data-lucide="globe-2" class="w-8 h-8 text-indigo-400"></i>
+                        <h3 class="text-2xl font-bold text-white">Laman Website</h3>
+                    </div>
+                    <p class="text-gray-300">Akses cepat ke berbagai laman website Bagian Organisasi.</p>
+                </div>
+            </div>
+
+            <!-- Card 2: Produk Hukum -->
+            <div class="glass-card flex flex-col overflow-hidden cursor-pointer" data-modal-target="modal-hukum">
+                <img src="https://placehold.co/600x300/8b5cf6/FFFFFF?text=Produk+Hukum" alt="Gambar Produk Hukum" class="w-full h-40 object-cover">
+                <div class="p-6 flex-grow">
+                    <div class="flex items-center gap-4 mb-3">
+                        <i data-lucide="scale" class="w-8 h-8 text-purple-400"></i>
+                        <h3 class="text-2xl font-bold text-white">Produk Hukum</h3>
+                    </div>
+                    <p class="text-gray-300">Dokumen Produk Hukum Bagian Organisasi</p>
+                </div>
+            </div>
+            
+            <!-- Card 3: Konsultasi -->
+            <div class="glass-card flex flex-col overflow-hidden cursor-pointer" data-modal-target="modal-konsultasi">
+                <img src="https://placehold.co/600x300/ec4899/FFFFFF?text=Konsultasi" alt="Gambar Konsultasi" class="w-full h-40 object-cover">
+                <div class="p-6 flex-grow">
+                    <div class="flex items-center gap-4 mb-3">
+                        <i data-lucide="messages-square" class="w-8 h-8 text-pink-400"></i>
+                        <h3 class="text-2xl font-bold text-white">Konsultasi</h3>
+                    </div>
+                    <p class="text-gray-300">Layanan konsultasi online Bagian Organisasi</p>
+                </div>
+            </div>
+
+            <!-- Card 4: Survei Kepuasan Masyarakat (Tautan Langsung) -->
+            <a href="https://siputri.kaboki.go.id/SKM/tambah?id_opd=42" class="glass-card flex flex-col overflow-hidden no-underline">
+                <img src="https://placehold.co/600x300/10b981/FFFFFF?text=Survei" alt="Gambar Survei" class="w-full h-40 object-cover">
+                <div class="p-6 flex-grow">
+                    <div class="flex items-center gap-4 mb-3">
+                        <i data-lucide="smile" class="w-8 h-8 text-emerald-400"></i>
+                        <h3 class="text-2xl font-bold text-white">Survei Kepuasan Masyarakat</h3>
+                    </div>
+                    <p class="text-gray-300">Beri masukan Anda untuk peningkatan layanan kami.</p>
+                </div>
+            </a>
+        </div>
     </div>
+    
+    <!-- === MODALS === -->
+
+    <!-- Modal: Laman Website -->
+    <div id="modal-website" class="modal">
+        <div class="modal-content glass-card p-6 md:p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-white">Website</h2>
+                <button class="modal-close p-2 rounded-full hover:bg-white/10 transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <a href="https://www.siputri.kaboki.go.id" class="glass-card block p-5 text-left w-full hover:border-indigo-400">
+                    <div class="flex items-center gap-4">
+                        <i data-lucide="database-zap" class="w-6 h-6 text-indigo-300"></i>
+                        <span class="font-semibold">SIPUTRI</span>
+                    </div>
+                </a>
+                <a href="https://www.maturity.kaboki.go.id" class="glass-card block p-5 text-left w-full hover:border-indigo-400">
+                     <div class="flex items-center gap-4">
+                        <i data-lucide="trending-up" class="w-6 h-6 text-indigo-300"></i>
+                        <span class="font-semibold">MATURITY</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Produk Hukum -->
+    <div id="modal-hukum" class="modal">
+        <div class="modal-content glass-card p-6 md:p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-white">Pilih Produk Hukum</h2>
+                <button class="modal-close p-2 rounded-full hover:bg-white/10 transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <a href="https://drive.google.com/drive/folders/1ZjKPXlU0DI3T-WESq7YFRzqfjShPL1KJ?usp=sharing" class="glass-card block p-5 text-left w-full hover:border-purple-400"><div class="flex items-center gap-4"><i data-lucide="landmark" class="w-6 h-6 text-purple-300"></i><span class="font-semibold">Peraturan Pusat</span></div></a>
+                <a href="https://drive.google.com/drive/folders/1fkJjZworfkzXpX7VJ3Mhg95yK7AAx8Le?usp=sharing" class="glass-card block p-5 text-left w-full hover:border-purple-400"><div class="flex items-center gap-4"><i data-lucide="building-2" class="w-6 h-6 text-purple-300"></i><span class="font-semibold">Peraturan Daerah</span></div></a>
+                <a href="https://drive.google.com/drive/folders/1Y7w80AVW9jC6MJbdHEAl5qV-TTJBQkLr?usp=sharing" class="glass-card block p-5 text-left w-full hover:border-purple-400"><div class="flex items-center gap-4"><i data-lucide="user-cog" class="w-6 h-6 text-purple-300"></i><span class="font-semibold">Peraturan Bupati</span></div></a>
+                <a href="https://drive.google.com/drive/folders/1xr5DyF9blC1xIYfGZYuAf3Iv4F5g89g3?usp=sharing" class="glass-card block p-5 text-left w-full hover:border-purple-400"><div class="flex items-center gap-4"><i data-lucide="file-check-2" class="w-6 h-6 text-purple-300"></i><span class="font-semibold">Surat Keputusan Bupati</span></div></a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal: Konsultasi -->
+    <div id="modal-konsultasi" class="modal">
+        <div class="modal-content glass-card p-6 md:p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-white">Pilih Bidang Konsultasi</h2>
+                <button class="modal-close p-2 rounded-full hover:bg-white/10 transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <a href="#" class="glass-card block p-5 text-left w-full hover:border-pink-400"><div class="flex items-center gap-4"><i data-lucide="briefcase" class="w-6 h-6 text-pink-300"></i><span class="font-semibold">ANJAB DAN KELEMBAGAAN</span></div></a>
+                <a href="#" class="glass-card block p-5 text-left w-full hover:border-pink-400"><div class="flex items-center gap-4"><i data-lucide="users" class="w-6 h-6 text-pink-300"></i><span class="font-semibold">PELAYANAN PUBLIK DAN TATA LAKSANA</span></div></a>
+                <a href="#" class="glass-card block p-5 text-left w-full hover:border-pink-400"><div class="flex items-center gap-4"><i data-lucide="line-chart" class="w-6 h-6 text-pink-300"></i><span class="font-semibold">KINERJA DAN REFORMASI BIROKRASI</span></div></a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Inisialisasi Lucide Icons
+        lucide.createIcons();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const modalTriggers = document.querySelectorAll('[data-modal-target]');
+            const modals = document.querySelectorAll('.modal');
+            const modalCloses = document.querySelectorAll('.modal-close');
+
+            // Fungsi untuk membuka modal
+            const openModal = (modalId) => {
+                const modal = document.getElementById(modalId);
+                if (modal) {
+                    document.body.style.overflow = 'hidden'; // Mencegah scroll di background
+                    modal.classList.add('active');
+                }
+            };
+
+            // Fungsi untuk menutup modal
+            const closeModal = (modal) => {
+                if (modal) {
+                    document.body.style.overflow = ''; // Mengembalikan scroll
+                    modal.classList.remove('active');
+                }
+            };
+
+            // Event listener untuk setiap pemicu modal
+            modalTriggers.forEach(trigger => {
+                trigger.addEventListener('click', () => {
+                    const modalId = trigger.getAttribute('data-modal-target');
+                    openModal(modalId);
+                });
+            });
+
+            // Event listener untuk tombol close di dalam modal
+            modalCloses.forEach(button => {
+                button.addEventListener('click', () => {
+                    const modal = button.closest('.modal');
+                    closeModal(modal);
+                });
+            });
+
+            // Event listener untuk menutup modal saat mengklik di luar area konten
+            modals.forEach(modal => {
+                modal.addEventListener('click', (event) => {
+                    // Cek jika yang diklik adalah area modal (latar belakang), bukan kontennya
+                    if (event.target === modal) {
+                        closeModal(modal);
+                    }
+                });
+            });
+
+            // Event listener untuk menutup modal dengan tombol 'Escape'
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    const activeModal = document.querySelector('.modal.active');
+                    closeModal(activeModal);
+                }
+            });
+        });
+    </script>
 </body>
 </html>
+
